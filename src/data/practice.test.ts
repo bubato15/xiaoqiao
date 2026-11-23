@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { fromPinyin } from "../lib/speech/sandhi";
-import { FACTORY_TOPIC, PRACTICE_TOPICS } from "./practice";
+import { CANTEEN_TOPIC, FACTORY_TOPIC, PRACTICE_TOPICS } from "./practice";
 
 const REQUIRED_39_WORDS = [
   "公司", "部门", "生产部", "仓库部", "人事部", "财务部", "技术部", "经理", "总经理",
@@ -17,6 +17,17 @@ describe("practice topics", () => {
       expect(factoryHanzi.has(word), `Missing word: ${word}`).toBe(true);
     }
     expect(FACTORY_TOPIC.words.length).toBe(39);
+  });
+
+  it("includes canteen topic with essential vocabulary and reflex sentences", () => {
+    expect(CANTEEN_TOPIC.words.length).toBeGreaterThanOrEqual(40);
+    expect(CANTEEN_TOPIC.sentences.length).toBeGreaterThanOrEqual(10);
+    const hanziWords = new Set(CANTEEN_TOPIC.words.map((w) => w.hanzi));
+    expect(hanziWords.has("食堂")).toBe(true);
+    expect(hanziWords.has("饭卡")).toBe(true);
+    expect(hanziWords.has("加班餐")).toBe(true);
+    expect(hanziWords.has("米饭")).toBe(true);
+    expect(hanziWords.has("吃饱")).toBe(true);
   });
 
   it("has valid pinyin matching syllable counts for every practice word", () => {
