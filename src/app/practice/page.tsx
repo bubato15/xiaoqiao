@@ -88,10 +88,8 @@ export default function PracticePage() {
 
               <div className="mt-6 flex items-center justify-between border-t border-rule pt-4 text-xs font-semibold">
                 <span className="text-ink-soft">
-                  {topic.words.length} từ vựng · {topic.sentences.length} câu phản xạ
-                  {topic.writingExercises && topic.writingExercises.length > 0 && (
-                    <> · {topic.writingExercises.length} bài luyện viết</>
-                  )}
+                  {topic.words.length} từ vựng · {topic.sentences.length} câu phản xạ ·{" "}
+                  {(topic.writingExercises?.length || topic.sentences.length)} bài viết
                 </span>
                 <span className="seal px-4 py-1.5 text-xs text-white">
                   Vào luyện ngay →

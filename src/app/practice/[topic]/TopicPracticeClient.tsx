@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import type { PracticeTopic } from "@/data/practice";
+import type { PracticeTopic, WritingExercise } from "@/data/practice";
 import { useStore } from "@/lib/local-store";
 import {
   practiceProgress,
@@ -19,22 +19,29 @@ import { Calibration } from "@/components/Calibration";
 
 type TabId = "flashcard" | "quiz" | "reflex" | "speak" | "writing";
 
-const TABS: { id: TabId; label: string; icon: string; requiresWriting?: boolean }[] = [
+const TABS: { id: TabId; label: string; icon: string }[] = [
   { id: "flashcard", label: "Thẻ ghi nhớ", icon: "🗂️" },
   { id: "quiz", label: "Trắc nghiệm phản xạ", icon: "⚡" },
   { id: "reflex", label: "Dịch câu phản xạ", icon: "💬" },
   { id: "speak", label: "Luyện phát âm", icon: "🎙️" },
-  { id: "writing", label: "Luyện viết tay", icon: "✍️", requiresWriting: true },
+  { id: "writing", label: "Bài tập viết", icon: "✍️" },
 ];
 
 export function TopicPracticeClient({ topic }: { topic: PracticeTopic }) {
   const [currentTab, setCurrentTab] = useState<TabId>("flashcard");
   const progress = useStore(practiceProgress);
 
-  const hasWriting = Array.isArray(topic.writingExercises) && topic.writingExercises.length > 0;
-
-  // Filter tabs: show "writing" only when topic has writingExercises
-  const visibleTabs = TABS.filter((t) => !t.requiresWriting || hasWriting);
+  // Use defined writingExercises or fallback to translating sentences
+  const writingExercises: WritingExercise[] =
+    topic.writingExercises && topic.writingExercises.length > 0
+      ? topic.writingExercises
+      : topic.sentences.map((s) => ({
+          id: s.id,
+          question: `Dịch câu sau sang tiếng Trung: "${s.vi}"`,
+          hint: s.situation ? `Tình huống: ${s.situation}` : "",
+          sampleAnswer: s.hanzi,
+          keywords: s.keywords,
+        }));
 
   // Extract mastered words for this topic
   const masteredMap: Record<string, boolean> = {};
@@ -121,7 +128,7 @@ export function TopicPracticeClient({ topic }: { topic: PracticeTopic }) {
         aria-label="Chế độ bài tập"
         className="flex flex-wrap gap-2 border-b-2 border-rule pb-3"
       >
-        {visibleTabs.map((tab) => {
+        {TABS.map((tab) => {
           const active = currentTab === tab.id;
           return (
             <button
@@ -143,8 +150,8 @@ export function TopicPracticeClient({ topic }: { topic: PracticeTopic }) {
               {tab.id === "reflex" && (
                 <span className="ml-2 text-xs opacity-80">({topic.sentences.length})</span>
               )}
-              {tab.id === "writing" && topic.writingExercises && (
-                <span className="ml-2 text-xs opacity-80">({topic.writingExercises.length})</span>
+              {tab.id === "writing" && (
+                <span className="ml-2 text-xs opacity-80">({writingExercises.length})</span>
               )}
             </button>
           );
@@ -189,9 +196,9 @@ export function TopicPracticeClient({ topic }: { topic: PracticeTopic }) {
           />
         )}
 
-        {currentTab === "writing" && topic.writingExercises && topic.writingExercises.length > 0 && (
+        {currentTab === "writing" && (
           <WritingExerciseMode
-            exercises={topic.writingExercises}
+            exercises={writingExercises}
             topicId={topic.id}
           />
         )}
