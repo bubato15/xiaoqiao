@@ -14,20 +14,27 @@ import { FlashcardMode } from "@/components/practice/FlashcardMode";
 import { QuizMode } from "@/components/practice/QuizMode";
 import { SentenceReflexMode } from "@/components/practice/SentenceReflexMode";
 import { WordSpeakMode } from "@/components/practice/WordSpeakMode";
+import { WritingExerciseMode } from "@/components/practice/WritingExerciseMode";
 import { Calibration } from "@/components/Calibration";
 
-type TabId = "flashcard" | "quiz" | "reflex" | "speak";
+type TabId = "flashcard" | "quiz" | "reflex" | "speak" | "writing";
 
-const TABS: { id: TabId; label: string; icon: string }[] = [
+const TABS: { id: TabId; label: string; icon: string; requiresWriting?: boolean }[] = [
   { id: "flashcard", label: "Thẻ ghi nhớ", icon: "🗂️" },
   { id: "quiz", label: "Trắc nghiệm phản xạ", icon: "⚡" },
   { id: "reflex", label: "Dịch câu phản xạ", icon: "💬" },
   { id: "speak", label: "Luyện phát âm", icon: "🎙️" },
+  { id: "writing", label: "Luyện viết tay", icon: "✍️", requiresWriting: true },
 ];
 
 export function TopicPracticeClient({ topic }: { topic: PracticeTopic }) {
   const [currentTab, setCurrentTab] = useState<TabId>("flashcard");
   const progress = useStore(practiceProgress);
+
+  const hasWriting = Array.isArray(topic.writingExercises) && topic.writingExercises.length > 0;
+
+  // Filter tabs: show "writing" only when topic has writingExercises
+  const visibleTabs = TABS.filter((t) => !t.requiresWriting || hasWriting);
 
   // Extract mastered words for this topic
   const masteredMap: Record<string, boolean> = {};
@@ -114,7 +121,7 @@ export function TopicPracticeClient({ topic }: { topic: PracticeTopic }) {
         aria-label="Chế độ bài tập"
         className="flex flex-wrap gap-2 border-b-2 border-rule pb-3"
       >
-        {TABS.map((tab) => {
+        {visibleTabs.map((tab) => {
           const active = currentTab === tab.id;
           return (
             <button
@@ -135,6 +142,9 @@ export function TopicPracticeClient({ topic }: { topic: PracticeTopic }) {
               )}
               {tab.id === "reflex" && (
                 <span className="ml-2 text-xs opacity-80">({topic.sentences.length})</span>
+              )}
+              {tab.id === "writing" && topic.writingExercises && (
+                <span className="ml-2 text-xs opacity-80">({topic.writingExercises.length})</span>
               )}
             </button>
           );
@@ -176,6 +186,13 @@ export function TopicPracticeClient({ topic }: { topic: PracticeTopic }) {
             categories={topic.categories}
             masteredMap={masteredMap}
             onToggleMastered={(hanzi) => toggleWordMastered(topic.id, hanzi)}
+          />
+        )}
+
+        {currentTab === "writing" && topic.writingExercises && topic.writingExercises.length > 0 && (
+          <WritingExerciseMode
+            exercises={topic.writingExercises}
+            topicId={topic.id}
           />
         )}
       </div>

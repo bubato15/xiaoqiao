@@ -89,6 +89,9 @@ export default function PracticePage() {
               <div className="mt-6 flex items-center justify-between border-t border-rule pt-4 text-xs font-semibold">
                 <span className="text-ink-soft">
                   {topic.words.length} từ vựng · {topic.sentences.length} câu phản xạ
+                  {topic.writingExercises && topic.writingExercises.length > 0 && (
+                    <> · {topic.writingExercises.length} bài luyện viết</>
+                  )}
                 </span>
                 <span className="seal px-4 py-1.5 text-xs text-white">
                   Vào luyện ngay →
@@ -126,7 +129,7 @@ export default function PracticePage() {
         <h3 className="font-serif text-xl font-bold text-ink mb-4">
           💡 Cách học bài tập hiệu quả cùng XiaoQiao
         </h3>
-        <div className="grid gap-4 sm:grid-cols-3 text-sm">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 text-sm">
           <div className="rounded-2xl bg-paper-deep p-4">
             <h4 className="font-bold text-ink mb-1">1. Ghi nhớ bằng Thẻ Flashcard</h4>
             <p className="text-xs text-ink-soft leading-relaxed">
@@ -136,13 +139,19 @@ export default function PracticePage() {
           <div className="rounded-2xl bg-paper-deep p-4">
             <h4 className="font-bold text-ink mb-1">2. Kiểm tra phản xạ trắc nghiệm</h4>
             <p className="text-xs text-ink-soft leading-relaxed">
-              Luyện chọn nhanh đáp án theo cả 2 chiều (Hán $\rightarrow$ Việt và Việt $\rightarrow$ Hán) để tạo phản xạ nhận diện từ vựng tức thì.
+              Luyện chọn nhanh đáp án theo cả 2 chiều (Hán → Việt và Việt → Hán) để tạo phản xạ nhận diện từ vựng tức thì.
             </p>
           </div>
           <div className="rounded-2xl bg-paper-deep p-4">
             <h4 className="font-bold text-ink mb-1">3. Phản xạ câu dịch & Luyện nói</h4>
             <p className="text-xs text-ink-soft leading-relaxed">
               Đọc tình huống tiếng Việt, tự ghép câu tiếng Trung trong đầu, xem gợi ý từ khóa rồi bật mic đọc câu để XiaoQiao chấm điểm phát âm!
+            </p>
+          </div>
+          <div className="rounded-2xl bg-paper-deep p-4 border-2 border-seal/20">
+            <h4 className="font-bold text-ink mb-1">4. ✍️ Luyện viết tay & AI chấm bài</h4>
+            <p className="text-xs text-ink-soft leading-relaxed">
+              Đọc câu hỏi theo chủ đề, tự viết câu trả lời bằng tiếng Trung, nộp bài để XiaoQiao sửa lỗi và chấm điểm ngay lập tức!
             </p>
           </div>
         </div>

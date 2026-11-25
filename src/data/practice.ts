@@ -20,6 +20,14 @@ export interface PracticeSentence {
   keywords: string[];
 }
 
+export interface WritingExercise {
+  id: number;
+  question: string;
+  hint: string;
+  sampleAnswer: string;
+  keywords: string[];
+}
+
 export interface PracticeTopic {
   id: string;
   title: string;
@@ -30,6 +38,7 @@ export interface PracticeTopic {
   categories: string[];
   words: PracticeWord[];
   sentences: PracticeSentence[];
+  writingExercises?: WritingExercise[];
 }
 
 export const FACTORY_TOPIC: PracticeTopic = {
@@ -350,7 +359,373 @@ export const CANTEEN_TOPIC: PracticeTopic = {
   ],
 };
 
-export const PRACTICE_TOPICS: PracticeTopic[] = [FACTORY_TOPIC, CANTEEN_TOPIC];
+// ─── Bài 7: Bằng cấp & Xin việc ────────────────────────────────────────────
+export const RECRUITMENT_TOPIC: PracticeTopic = {
+  id: "bang-cap-xin-viec",
+  title: "Bằng cấp & Xin việc",
+  chineseTitle: "学历与求职",
+  tag: "Giao tiếp công xưởng – Bài 7",
+  description:
+    "35 từ vựng thiết yếu về trình độ học vấn, bằng cấp, tuyển dụng, phỏng vấn và 10 câu phản xạ thực tế khi ứng tuyển vào nhà máy.",
+  icon: "📋",
+  categories: [
+    "Trình độ & Bằng cấp",
+    "Tuyển dụng & Phỏng vấn",
+    "Chức vụ & Vị trí",
+    "Hồ sơ & Thủ tục",
+    "Thử việc & Nhận việc",
+  ],
+  words: [
+    // Trình độ & Bằng cấp
+    { hanzi: "学历", pinyin: "xue2 li4", vi: "trình độ học vấn", hanViet: "học lịch", category: "Trình độ & Bằng cấp" },
+    { hanzi: "学位", pinyin: "xue2 wei4", vi: "học vị", hanViet: "học vị", category: "Trình độ & Bằng cấp" },
+    { hanzi: "大专", pinyin: "da4 zhuan1", vi: "cao đẳng", hanViet: "đại chuyên", category: "Trình độ & Bằng cấp" },
+    { hanzi: "本科", pinyin: "ben3 ke1", vi: "đại học", hanViet: "bản khoa", category: "Trình độ & Bằng cấp" },
+    { hanzi: "高中", pinyin: "gao1 zhong1", vi: "THPT", hanViet: "cao trung", category: "Trình độ & Bằng cấp" },
+    { hanzi: "中专", pinyin: "zhong1 zhuan1", vi: "trung cấp", hanViet: "trung chuyên", category: "Trình độ & Bằng cấp" },
+    { hanzi: "毕业证", pinyin: "bi4 ye4 zheng4", vi: "bằng tốt nghiệp", hanViet: "tất nghiệp chứng", category: "Trình độ & Bằng cấp" },
+    { hanzi: "专业", pinyin: "zhuan1 ye4", vi: "chuyên ngành", hanViet: "chuyên nghiệp", category: "Trình độ & Bằng cấp" },
+    { hanzi: "技能证书", pinyin: "ji4 neng2 zheng4 shu1", vi: "chứng chỉ kỹ năng", hanViet: "kỹ năng chứng thư", category: "Trình độ & Bằng cấp" },
+    { hanzi: "工作经验", pinyin: "gong1 zuo4 jing1 yan4", vi: "kinh nghiệm làm việc", hanViet: "công tác kinh nghiệm", category: "Trình độ & Bằng cấp" },
+
+    // Tuyển dụng & Phỏng vấn
+    { hanzi: "招聘", pinyin: "zhao1 pin4", vi: "tuyển dụng", hanViet: "chiêu tuyển", category: "Tuyển dụng & Phỏng vấn" },
+    { hanzi: "应聘", pinyin: "ying4 pin4", vi: "ứng tuyển", hanViet: "ứng tuyển", category: "Tuyển dụng & Phỏng vấn" },
+    { hanzi: "面试", pinyin: "mian4 shi4", vi: "phỏng vấn", hanViet: "diện thí", category: "Tuyển dụng & Phỏng vấn" },
+    { hanzi: "面试官", pinyin: "mian4 shi4 guan1", vi: "người phỏng vấn", hanViet: "diện thí quan", category: "Tuyển dụng & Phỏng vấn" },
+    { hanzi: "求职者", pinyin: "qiu2 zhi2 zhe3", vi: "người tìm việc", hanViet: "cầu chức giả", category: "Tuyển dụng & Phỏng vấn" },
+    { hanzi: "招聘要求", pinyin: "zhao1 pin4 yao1 qiu2", vi: "yêu cầu tuyển dụng", hanViet: "chiêu tuyển yêu cầu", category: "Tuyển dụng & Phỏng vấn" },
+    { hanzi: "录用", pinyin: "lu4 yong4", vi: "tuyển nhận, nhận vào làm", hanViet: "lục dụng", category: "Tuyển dụng & Phỏng vấn" },
+
+    // Chức vụ & Vị trí
+    { hanzi: "岗位", pinyin: "gang3 wei4", vi: "vị trí công việc", hanViet: "cương vị", category: "Chức vụ & Vị trí" },
+    { hanzi: "普工", pinyin: "pu3 gong1", vi: "công nhân phổ thông", hanViet: "phổ công", category: "Chức vụ & Vị trí" },
+    { hanzi: "操作工", pinyin: "cao1 zuo4 gong1", vi: "công nhân vận hành", hanViet: "thao tác công", category: "Chức vụ & Vị trí" },
+    { hanzi: "技术员", pinyin: "ji4 shu4 yuan2", vi: "nhân viên kỹ thuật", hanViet: "kỹ thuật viên", category: "Chức vụ & Vị trí" },
+    { hanzi: "质检员", pinyin: "zhi4 jian3 yuan2", vi: "nhân viên kiểm tra chất lượng (QC)", hanViet: "chất kiểm viên", category: "Chức vụ & Vị trí" },
+
+    // Hồ sơ & Thủ tục
+    { hanzi: "简历", pinyin: "jian3 li4", vi: "CV, sơ yếu lý lịch", hanViet: "giản lịch", category: "Hồ sơ & Thủ tục" },
+    { hanzi: "个人简历", pinyin: "ge4 ren2 jian3 li4", vi: "CV cá nhân", hanViet: "cá nhân giản lịch", category: "Hồ sơ & Thủ tục" },
+    { hanzi: "身份证", pinyin: "shen1 fen4 zheng4", vi: "CCCD, chứng minh nhân dân", hanViet: "thân phận chứng", category: "Hồ sơ & Thủ tục" },
+    { hanzi: "劳动合同", pinyin: "lao2 dong4 he2 tong5", vi: "hợp đồng lao động", hanViet: "lao động hợp đồng", category: "Hồ sơ & Thủ tục" },
+    { hanzi: "招聘信息", pinyin: "zhao1 pin4 xin4 xi1", vi: "thông tin tuyển dụng", hanViet: "chiêu tuyển thông tin", category: "Hồ sơ & Thủ tục" },
+
+    // Thử việc & Nhận việc
+    { hanzi: "试用期", pinyin: "shi4 yong4 qi1", vi: "thời gian thử việc", hanViet: "thí dụng kỳ", category: "Thử việc & Nhận việc" },
+    { hanzi: "正式员工", pinyin: "zheng4 shi4 yuan2 gong1", vi: "nhân viên chính thức", hanViet: "chính thức viên công", category: "Thử việc & Nhận việc" },
+    { hanzi: "入职", pinyin: "ru4 zhi2", vi: "nhận việc, bắt đầu làm", hanViet: "nhập chức", category: "Thử việc & Nhận việc" },
+    { hanzi: "离职", pinyin: "li2 zhi2", vi: "nghỉ việc, thôi việc", hanViet: "ly chức", category: "Thử việc & Nhận việc" },
+    { hanzi: "薪资待遇", pinyin: "xin1 zi1 dai4 yu4", vi: "mức lương và đãi ngộ", hanViet: "tân tư đãi ngộ", category: "Thử việc & Nhận việc" },
+    { hanzi: "薪资要求", pinyin: "xin1 zi1 yao1 qiu2", vi: "yêu cầu về mức lương", hanViet: "tân tư yêu cầu", category: "Thử việc & Nhận việc" },
+    { hanzi: "应届毕业生", pinyin: "ying4 jie4 bi4 ye4 sheng1", vi: "sinh viên mới tốt nghiệp", hanViet: "ứng giới tất nghiệp sinh", category: "Thử việc & Nhận việc" },
+  ],
+  sentences: [
+    {
+      id: 1,
+      hanzi: "你好，我想应聘贵公司的操作工岗位。",
+      pinyin: "ni3 hao3 wo3 xiang3 ying4 pin4 gui4 gong1 si1 de5 cao1 zuo4 gong1 gang3 wei4",
+      vi: "Xin chào, tôi muốn ứng tuyển vị trí công nhân vận hành của quý công ty.",
+      situation: "Tự giới thiệu và nêu mục đích khi đến gặp bộ phận nhân sự",
+      keywords: ["应聘", "岗位", "操作工"],
+    },
+    {
+      id: 2,
+      hanzi: "我是大专学历，有两年的工厂工作经验。",
+      pinyin: "wo3 shi4 da4 zhuan1 xue2 li4 you3 liang3 nian2 de5 gong1 chang3 gong1 zuo4 jing1 yan4",
+      vi: "Tôi tốt nghiệp cao đẳng, có hai năm kinh nghiệm làm việc trong nhà máy.",
+      situation: "Trả lời câu hỏi về trình độ học vấn và kinh nghiệm của HR",
+      keywords: ["大专", "学历", "工作经验"],
+    },
+    {
+      id: 3,
+      hanzi: "这个岗位需要什么学历要求？",
+      pinyin: "zhe4 ge4 gang3 wei4 xu1 yao4 shen2 me5 xue2 li4 yao1 qiu2",
+      vi: "Vị trí này yêu cầu trình độ học vấn gì?",
+      situation: "Hỏi HR về yêu cầu bằng cấp trước khi nộp hồ sơ",
+      keywords: ["岗位", "学历", "要求"],
+    },
+    {
+      id: 4,
+      hanzi: "请问试用期是多长时间？",
+      pinyin: "qing3 wen4 shi4 yong4 qi1 shi4 duo1 chang2 shi2 jian1",
+      vi: "Cho hỏi thời gian thử việc là bao lâu?",
+      situation: "Hỏi về thời gian thử việc khi được phỏng vấn hoặc nhận việc",
+      keywords: ["试用期"],
+    },
+    {
+      id: 5,
+      hanzi: "面试通过了吗？什么时候可以入职？",
+      pinyin: "mian4 shi4 tong1 guo4 le5 ma5 shen2 me5 shi2 hou4 ke3 yi3 ru4 zhi2",
+      vi: "Phỏng vấn qua rồi chưa? Khi nào có thể nhận việc?",
+      situation: "Hỏi kết quả phỏng vấn và ngày nhận việc",
+      keywords: ["面试", "入职"],
+    },
+    {
+      id: 6,
+      hanzi: "您好，我是来参加面试的，请问面试官在哪里？",
+      pinyin: "nin2 hao3 wo3 shi4 lai2 can1 jia1 mian4 shi4 de5 qing3 wen4 mian4 shi4 guan1 zai4 na3 li3",
+      vi: "Xin chào, tôi đến tham dự phỏng vấn, xin hỏi người phỏng vấn ở đâu ạ?",
+      situation: "Hỏi đường hoặc hỏi tiếp tân khi đến công ty phỏng vấn",
+      keywords: ["面试", "面试官"],
+    },
+    {
+      id: 7,
+      hanzi: "我有电工证书，可以操作电气设备。",
+      pinyin: "wo3 you3 dian4 gong1 zheng4 shu1 ke3 yi3 cao1 zuo4 dian4 qi4 she4 bei4",
+      vi: "Tôi có chứng chỉ điện, có thể vận hành thiết bị điện.",
+      situation: "Giới thiệu chứng chỉ kỹ năng nghề trong buổi phỏng vấn",
+      keywords: ["技能证书", "操作"],
+    },
+    {
+      id: 8,
+      hanzi: "请问贵公司现在还招操作工吗？",
+      pinyin: "qing3 wen4 gui4 gong1 si1 xian4 zai4 hai2 zhao1 cao1 zuo4 gong1 ma5",
+      vi: "Cho hỏi hiện tại quý công ty còn tuyển công nhân vận hành không?",
+      situation: "Hỏi thăm thông tin tuyển dụng qua điện thoại hoặc trực tiếp",
+      keywords: ["招聘", "操作工"],
+    },
+    {
+      id: 9,
+      hanzi: "我需要带什么材料来入职？",
+      pinyin: "wo3 xu1 yao4 dai4 shen2 me5 cai2 liao4 lai2 ru4 zhi2",
+      vi: "Tôi cần mang theo những giấy tờ gì khi đến nhận việc?",
+      situation: "Hỏi HR về hồ sơ cần chuẩn bị trước ngày nhận việc",
+      keywords: ["入职", "身份证", "劳动合同"],
+    },
+    {
+      id: 10,
+      hanzi: "试用期结束后，我的薪资待遇会怎么调整？",
+      pinyin: "shi4 yong4 qi1 jie2 shu4 hou4 wo3 de5 xin1 zi1 dai4 yu4 hui4 zen3 me5 tiao2 zheng3",
+      vi: "Sau khi kết thúc thử việc, mức lương đãi ngộ của tôi sẽ được điều chỉnh như thế nào?",
+      situation: "Hỏi HR về chế độ lương sau thử việc khi ký hợp đồng chính thức",
+      keywords: ["试用期", "薪资待遇"],
+    },
+  ],
+  writingExercises: [
+    {
+      id: 1,
+      question: "Bạn muốn ứng tuyển vào công ty. Hãy giới thiệu trình độ học vấn và kinh nghiệm của bạn bằng tiếng Trung.",
+      hint: "Dùng: 我是...学历，有...年工作经验",
+      sampleAnswer: "我是大专学历，有两年工厂工作经验，做过操作工。",
+      keywords: ["学历", "工作经验"],
+    },
+    {
+      id: 2,
+      question: "Hỏi HR xem thời gian thử việc là bao lâu và lương thử việc là bao nhiêu.",
+      hint: "Dùng: 请问试用期...？试用期工资...？",
+      sampleAnswer: "请问试用期是多长时间？试用期工资是多少？",
+      keywords: ["试用期"],
+    },
+    {
+      id: 3,
+      question: "Mô tả vị trí công việc bạn muốn ứng tuyển và hỏi về yêu cầu tuyển dụng.",
+      hint: "Dùng: 我想应聘...岗位，这个岗位有什么要求？",
+      sampleAnswer: "我想应聘质检员岗位，请问这个岗位有什么招聘要求？",
+      keywords: ["应聘", "岗位", "招聘要求"],
+    },
+    {
+      id: 4,
+      question: "Hỏi khi nào có thể đến nhận việc và cần mang theo những giấy tờ gì.",
+      hint: "Dùng: 什么时候可以入职？需要带什么材料？",
+      sampleAnswer: "什么时候可以入职？入职需要带什么材料？",
+      keywords: ["入职", "身份证"],
+    },
+    {
+      id: 5,
+      question: "Giới thiệu bản thân: tên, chuyên ngành học, và bạn có chứng chỉ kỹ năng gì.",
+      hint: "Dùng: 我叫...，学的是...专业，有...证书",
+      sampleAnswer: "我叫阿明，学的是电气专业，有电工技能证书。",
+      keywords: ["专业", "技能证书"],
+    },
+  ],
+};
+
+// ─── Bài 7: Chế độ phúc lợi ─────────────────────────────────────────────────
+export const WELFARE_TOPIC: PracticeTopic = {
+  id: "che-do-phuc-loi",
+  title: "Chế độ phúc lợi",
+  chineseTitle: "福利待遇",
+  tag: "Giao tiếp công xưởng – Bài 7",
+  description:
+    "38 từ vựng thiết yếu về lương thưởng, bảo hiểm, nghỉ phép, trợ cấp và 10 câu phản xạ thực tế khi hỏi HR về quyền lợi lao động trong nhà máy.",
+  icon: "🎁",
+  categories: [
+    "Lương & Thưởng",
+    "Bảo hiểm & An sinh",
+    "Phụ cấp & Trợ cấp",
+    "Nghỉ phép & Ngày nghỉ",
+    "Điều kiện làm việc",
+  ],
+  words: [
+    // Lương & Thưởng
+    { hanzi: "福利待遇", pinyin: "fu2 li4 dai4 yu4", vi: "chế độ phúc lợi", hanViet: "phúc lợi đãi ngộ", category: "Lương & Thưởng" },
+    { hanzi: "工资", pinyin: "gong1 zi1", vi: "tiền lương", hanViet: "công tư", category: "Lương & Thưởng" },
+    { hanzi: "基本工资", pinyin: "ji1 ben3 gong1 zi1", vi: "lương cơ bản", hanViet: "cơ bản công tư", category: "Lương & Thưởng" },
+    { hanzi: "底薪", pinyin: "di3 xin1", vi: "lương cứng", hanViet: "để tân", category: "Lương & Thưởng" },
+    { hanzi: "绩效工资", pinyin: "ji4 xiao4 gong1 zi1", vi: "lương hiệu suất", hanViet: "tích hiệu công tư", category: "Lương & Thưởng" },
+    { hanzi: "全勤奖", pinyin: "quan2 qin2 jiang3", vi: "thưởng chuyên cần", hanViet: "toàn cần thưởng", category: "Lương & Thưởng" },
+    { hanzi: "绩效奖金", pinyin: "ji4 xiao4 jiang3 jin1", vi: "thưởng hiệu suất", hanViet: "tích hiệu tưởng kim", category: "Lương & Thưởng" },
+    { hanzi: "年终奖", pinyin: "nian2 zhong1 jiang3", vi: "thưởng cuối năm", hanViet: "niên chung thưởng", category: "Lương & Thưởng" },
+    { hanzi: "加班费", pinyin: "jia1 ban1 fei4", vi: "tiền tăng ca", hanViet: "gia ban phí", category: "Lương & Thưởng" },
+
+    // Bảo hiểm & An sinh
+    { hanzi: "社会保险", pinyin: "she4 hui4 bao3 xian3", vi: "bảo hiểm xã hội", hanViet: "xã hội bảo hiểm", category: "Bảo hiểm & An sinh" },
+    { hanzi: "医疗保险", pinyin: "yi1 liao2 bao3 xian3", vi: "bảo hiểm y tế", hanViet: "y liệu bảo hiểm", category: "Bảo hiểm & An sinh" },
+    { hanzi: "养老保险", pinyin: "yang3 lao3 bao3 xian3", vi: "bảo hiểm hưu trí", hanViet: "dưỡng lão bảo hiểm", category: "Bảo hiểm & An sinh" },
+    { hanzi: "五险一金", pinyin: "wu3 xian3 yi4 jin1", vi: "5 loại bảo hiểm + quỹ nhà ở (Trung Quốc)", hanViet: "ngũ hiểm nhất kim", category: "Bảo hiểm & An sinh" },
+    { hanzi: "定期体检", pinyin: "ding4 qi1 ti3 jian3", vi: "khám sức khỏe định kỳ", hanViet: "định kỳ thể kiểm", category: "Bảo hiểm & An sinh" },
+
+    // Phụ cấp & Trợ cấp
+    { hanzi: "岗位津贴", pinyin: "gang3 wei4 jin1 tie1", vi: "phụ cấp vị trí", hanViet: "cương vị tân thiếp", category: "Phụ cấp & Trợ cấp" },
+    { hanzi: "夜班补贴", pinyin: "ye4 ban1 bu3 tie1", vi: "phụ cấp ca đêm", hanViet: "dạ ban bổ thiếp", category: "Phụ cấp & Trợ cấp" },
+    { hanzi: "交通补贴", pinyin: "jiao1 tong1 bu3 tie1", vi: "phụ cấp đi lại", hanViet: "giao thông bổ thiếp", category: "Phụ cấp & Trợ cấp" },
+    { hanzi: "住房补贴", pinyin: "zhu4 fang2 bu3 tie1", vi: "trợ cấp nhà ở", hanViet: "trú phòng bổ thiếp", category: "Phụ cấp & Trợ cấp" },
+    { hanzi: "餐补", pinyin: "can1 bu3", vi: "trợ cấp tiền ăn", hanViet: "xan bổ", category: "Phụ cấp & Trợ cấp" },
+    { hanzi: "免费工作餐", pinyin: "mian3 fei4 gong1 zuo4 can1", vi: "cơm miễn phí tại công ty", hanViet: "miễn phí công tác xan", category: "Phụ cấp & Trợ cấp" },
+    { hanzi: "员工宿舍", pinyin: "yuan2 gong1 su4 she4", vi: "ký túc xá nhân viên", hanViet: "viên công túc xá", category: "Phụ cấp & Trợ cấp" },
+    { hanzi: "节日福利", pinyin: "jie2 ri4 fu2 li4", vi: "phúc lợi dịp lễ", hanViet: "tiết nhật phúc lợi", category: "Phụ cấp & Trợ cấp" },
+
+    // Nghỉ phép & Ngày nghỉ
+    { hanzi: "带薪休假", pinyin: "dai4 xin1 xiu1 jia4", vi: "nghỉ phép hưởng lương", hanViet: "đới tân hưu giả", category: "Nghỉ phép & Ngày nghỉ" },
+    { hanzi: "年假", pinyin: "nian2 jia4", vi: "nghỉ phép năm", hanViet: "niên giả", category: "Nghỉ phép & Ngày nghỉ" },
+    { hanzi: "婚假", pinyin: "hun1 jia4", vi: "nghỉ kết hôn", hanViet: "hôn giả", category: "Nghỉ phép & Ngày nghỉ" },
+    { hanzi: "产假", pinyin: "chan3 jia4", vi: "nghỉ thai sản", hanViet: "sản giả", category: "Nghỉ phép & Ngày nghỉ" },
+    { hanzi: "病假", pinyin: "bing4 jia4", vi: "nghỉ ốm", hanViet: "bệnh giả", category: "Nghỉ phép & Ngày nghỉ" },
+    { hanzi: "调休", pinyin: "tiao2 xiu1", vi: "nghỉ bù", hanViet: "điều hưu", category: "Nghỉ phép & Ngày nghỉ" },
+
+    // Điều kiện làm việc
+    { hanzi: "晋升机会", pinyin: "jin4 sheng1 ji1 hui4", vi: "cơ hội thăng tiến", hanViet: "tấn thăng cơ hội", category: "Điều kiện làm việc" },
+    { hanzi: "两班倒", pinyin: "liang3 ban1 dao3", vi: "làm 2 ca luân phiên", hanViet: "lưỡng ban đảo", category: "Điều kiện làm việc" },
+    { hanzi: "三班倒", pinyin: "san1 ban1 dao3", vi: "làm 3 ca luân phiên", hanViet: "tam ban đảo", category: "Điều kiện làm việc" },
+    { hanzi: "考勤", pinyin: "kao3 qin2", vi: "chấm công", hanViet: "khảo cần", category: "Điều kiện làm việc" },
+    { hanzi: "打卡", pinyin: "da3 ka3", vi: "chấm công bằng thẻ/máy", hanViet: "đả tạp", category: "Điều kiện làm việc" },
+    { hanzi: "迟到", pinyin: "chi2 dao4", vi: "đi muộn", hanViet: "trì đáo", category: "Điều kiện làm việc" },
+    { hanzi: "早退", pinyin: "zao3 tui4", vi: "về sớm", hanViet: "tảo thối", category: "Điều kiện làm việc" },
+    { hanzi: "旷工", pinyin: "kuang4 gong1", vi: "tự ý nghỉ làm, vắng mặt không phép", hanViet: "khoáng công", category: "Điều kiện làm việc" },
+  ],
+  sentences: [
+    {
+      id: 1,
+      hanzi: "公司有什么福利待遇？",
+      pinyin: "gong1 si1 you3 shen2 me5 fu2 li4 dai4 yu4",
+      vi: "Công ty có những chế độ phúc lợi gì?",
+      situation: "Hỏi HR về tổng quan phúc lợi khi phỏng vấn hoặc tìm hiểu công ty",
+      keywords: ["福利待遇"],
+    },
+    {
+      id: 2,
+      hanzi: "公司包吃包住吗？",
+      pinyin: "gong1 si1 bao1 chi1 bao1 zhu4 ma5",
+      vi: "Công ty có bao ăn ở không?",
+      situation: "Hỏi HR về chế độ ăn ở miễn phí khi tìm hiểu về công việc",
+      keywords: ["免费工作餐", "员工宿舍"],
+    },
+    {
+      id: 3,
+      hanzi: "加班有加班费吗？加班费怎么算？",
+      pinyin: "jia1 ban1 you3 jia1 ban1 fei4 ma5 jia1 ban1 fei4 zen3 me5 suan4",
+      vi: "Tăng ca có tiền tăng ca không? Tiền tăng ca tính như thế nào?",
+      situation: "Hỏi HR về chính sách tăng ca và cách tính tiền làm thêm giờ",
+      keywords: ["加班费"],
+    },
+    {
+      id: 4,
+      hanzi: "公司给员工交社保吗？",
+      pinyin: "gong1 si1 gei3 yuan2 gong1 jiao1 she4 bao3 ma5",
+      vi: "Công ty có đóng bảo hiểm xã hội cho nhân viên không?",
+      situation: "Hỏi HR về quyền lợi bảo hiểm xã hội bắt buộc",
+      keywords: ["社会保险"],
+    },
+    {
+      id: 5,
+      hanzi: "每个月几号发工资？",
+      pinyin: "mei3 ge4 yue4 ji3 hao4 fa1 gong1 zi1",
+      vi: "Hằng tháng ngày mấy phát lương?",
+      situation: "Hỏi về ngày trả lương hàng tháng để lên kế hoạch chi tiêu",
+      keywords: ["工资"],
+    },
+    {
+      id: 6,
+      hanzi: "公司有全勤奖吗？一个月多少钱？",
+      pinyin: "gong1 si1 you3 quan2 qin2 jiang3 ma5 yi1 ge4 yue4 duo1 shao3 qian2",
+      vi: "Công ty có thưởng chuyên cần không? Một tháng được bao nhiêu tiền?",
+      situation: "Hỏi về thưởng chuyên cần và điều kiện đạt thưởng",
+      keywords: ["全勤奖"],
+    },
+    {
+      id: 7,
+      hanzi: "一个月可以休息几天？有带薪年假吗？",
+      pinyin: "yi1 ge4 yue4 ke3 yi3 xiu1 xi5 ji3 tian1 you3 dai4 xin1 nian2 jia4 ma5",
+      vi: "Một tháng được nghỉ mấy ngày? Có nghỉ phép năm hưởng lương không?",
+      situation: "Hỏi về lịch nghỉ và chế độ phép năm",
+      keywords: ["带薪休假", "年假"],
+    },
+    {
+      id: 8,
+      hanzi: "上夜班有补贴吗？",
+      pinyin: "shang4 ye4 ban1 you3 bu3 tie1 ma5",
+      vi: "Làm ca đêm có phụ cấp không?",
+      situation: "Hỏi HR về phụ cấp ca đêm cho công nhân làm theo ca",
+      keywords: ["夜班补贴"],
+    },
+    {
+      id: 9,
+      hanzi: "公司有年终奖吗？什么条件可以拿到？",
+      pinyin: "gong1 si1 you3 nian2 zhong1 jiang3 ma5 shen2 me5 tiao2 jian4 ke3 yi3 na2 dao4",
+      vi: "Công ty có thưởng cuối năm không? Điều kiện gì để nhận được?",
+      situation: "Hỏi về điều kiện và mức thưởng Tết / cuối năm",
+      keywords: ["年终奖"],
+    },
+    {
+      id: 10,
+      hanzi: "公司实行两班倒，要注意打卡考勤。",
+      pinyin: "gong1 si1 shi2 xing2 liang3 ban1 dao3 yao4 zhu4 yi4 da3 ka3 kao3 qin2",
+      vi: "Công ty áp dụng chế độ 2 ca luân phiên, cần chú ý chấm công bằng thẻ.",
+      situation: "HR giải thích quy định ca làm việc và chấm công cho nhân viên mới",
+      keywords: ["两班倒", "打卡", "考勤"],
+    },
+  ],
+  writingExercises: [
+    {
+      id: 1,
+      question: "Hỏi HR xem công ty có bao ăn ở không và phụ cấp đi lại như thế nào.",
+      hint: "Dùng: 公司包吃包住吗？有没有交通补贴？",
+      sampleAnswer: "公司包吃包住吗？有没有交通补贴？",
+      keywords: ["免费工作餐", "员工宿舍", "交通补贴"],
+    },
+    {
+      id: 2,
+      question: "Hỏi về lương cơ bản, thưởng chuyên cần và ngày trả lương hàng tháng.",
+      hint: "Dùng: 基本工资是多少？有全勤奖吗？几号发工资？",
+      sampleAnswer: "基本工资是多少？有全勤奖吗？每个月几号发工资？",
+      keywords: ["基本工资", "全勤奖", "工资"],
+    },
+    {
+      id: 3,
+      question: "Hỏi xem công ty có đóng bảo hiểm xã hội và y tế cho nhân viên không.",
+      hint: "Dùng: 公司给员工交社会保险和医疗保险吗？",
+      sampleAnswer: "请问公司给员工交社会保险和医疗保险吗？",
+      keywords: ["社会保险", "医疗保险"],
+    },
+    {
+      id: 4,
+      question: "Mô tả chế độ làm ca tại công ty và hỏi về phụ cấp ca đêm.",
+      hint: "Dùng: 我们实行...班倒，上夜班有补贴吗？",
+      sampleAnswer: "我们实行三班倒，请问上夜班有夜班补贴吗？",
+      keywords: ["三班倒", "夜班补贴"],
+    },
+    {
+      id: 5,
+      question: "Hỏi về chế độ nghỉ phép năm và nghỉ ốm có hưởng lương không.",
+      hint: "Dùng: 有带薪年假吗？请病假可以领工资吗？",
+      sampleAnswer: "公司有带薪年假吗？请病假可以领工资吗？",
+      keywords: ["带薪休假", "年假", "病假"],
+    },
+  ],
+};
+
+export const PRACTICE_TOPICS: PracticeTopic[] = [FACTORY_TOPIC, CANTEEN_TOPIC, RECRUITMENT_TOPIC, WELFARE_TOPIC];
 
 export function findTopic(id: string): PracticeTopic | undefined {
   return PRACTICE_TOPICS.find((t) => t.id === id);
