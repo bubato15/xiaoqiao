@@ -74,22 +74,32 @@ export default function PracticePage() {
                 <p className="mt-3 text-sm text-ink-soft leading-relaxed">{topic.description}</p>
               </div>
 
-              {/* Categories tags preview */}
+              {/* Categories / Sub-lessons tags preview */}
               <div className="mt-4 flex flex-wrap gap-1.5">
-                {topic.categories.map((c) => (
-                  <span
-                    key={c}
-                    className="rounded-lg bg-paper-deep px-2.5 py-1 text-xs font-medium text-ink-soft"
-                  >
-                    {c}
-                  </span>
-                ))}
+                {topic.lessons
+                  ? topic.lessons.map((l) => (
+                      <span
+                        key={l.id}
+                        className="rounded-lg bg-paper-deep px-2.5 py-1 text-xs font-semibold text-ink-soft border border-rule/60 flex items-center gap-1.5"
+                      >
+                        <span>{l.icon || "•"}</span>
+                        <span>{l.title}</span>
+                      </span>
+                    ))
+                  : topic.categories.map((c) => (
+                      <span
+                        key={c}
+                        className="rounded-lg bg-paper-deep px-2.5 py-1 text-xs font-medium text-ink-soft"
+                      >
+                        {c}
+                      </span>
+                    ))}
               </div>
 
               <div className="mt-6 flex items-center justify-between border-t border-rule pt-4 text-xs font-semibold">
                 <span className="text-ink-soft">
-                  {topic.words.length} từ vựng · {topic.sentences.length} câu phản xạ ·{" "}
-                  {(topic.writingExercises?.length || topic.sentences.length)} bài viết
+                  {topic.lessons ? `${topic.lessons.length} mục bài nhỏ · ` : ""}
+                  {topic.words.length} từ vựng · {topic.sentences.length} câu phản xạ
                 </span>
                 <span className="seal px-4 py-1.5 text-xs text-white">
                   Vào luyện ngay →

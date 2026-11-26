@@ -28,6 +28,37 @@ export interface WritingExercise {
   keywords: string[];
 }
 
+export interface ChoiceOption {
+  key: "A" | "B" | "C" | "D";
+  text: string;
+}
+
+export interface ChoiceExercise {
+  id: number;
+  question: string;
+  pinyin?: string;
+  hint?: string;
+  options: ChoiceOption[];
+  answer: "A" | "B" | "C" | "D";
+  explanation?: string;
+}
+
+export interface PracticeLesson {
+  id: string;
+  title: string;
+  chineseTitle: string;
+  tag?: string;
+  description: string;
+  icon?: string;
+  categories: string[];
+  words: PracticeWord[];
+  sentences: PracticeSentence[];
+  writingExercises?: WritingExercise[];
+  fillInBlankExercises?: ChoiceExercise[];
+  viToZhExercises?: ChoiceExercise[];
+  zhToViExercises?: ChoiceExercise[];
+}
+
 export interface PracticeTopic {
   id: string;
   title: string;
@@ -39,6 +70,7 @@ export interface PracticeTopic {
   words: PracticeWord[];
   sentences: PracticeSentence[];
   writingExercises?: WritingExercise[];
+  lessons?: PracticeLesson[];
 }
 
 export const FACTORY_TOPIC: PracticeTopic = {
@@ -725,8 +757,108 @@ export const WELFARE_TOPIC: PracticeTopic = {
   ],
 };
 
-export const PRACTICE_TOPICS: PracticeTopic[] = [FACTORY_TOPIC, CANTEEN_TOPIC, RECRUITMENT_TOPIC, WELFARE_TOPIC];
+import { HSK1_30_TOPIC } from "./hsk1-30-practice";
+
+export const FACTORY_MAIN_TOPIC: PracticeTopic = {
+  id: "cong-xuong",
+  title: "Tiếng Trung công xưởng",
+  chineseTitle: "工厂汉语",
+  tag: "Chuyên đề thực chiến",
+  description:
+    "Bộ bài tập toàn diện tiếng Trung trong môi trường sản xuất, nhà máy: Cơ cấu vận hành, nhà ăn & đời sống, tuyển dụng xin việc và chế độ phúc lợi.",
+  icon: "🏭",
+  categories: [
+    "Cơ cấu & Vận hành",
+    "Đồ ăn công xưởng",
+    "Bằng cấp & Xin việc",
+    "Chế độ & Phúc lợi",
+  ],
+  words: [
+    ...FACTORY_TOPIC.words,
+    ...CANTEEN_TOPIC.words,
+    ...RECRUITMENT_TOPIC.words,
+    ...WELFARE_TOPIC.words,
+  ],
+  sentences: [
+    ...FACTORY_TOPIC.sentences,
+    ...CANTEEN_TOPIC.sentences,
+    ...RECRUITMENT_TOPIC.sentences,
+    ...WELFARE_TOPIC.sentences,
+  ],
+  writingExercises: [
+    ...(FACTORY_TOPIC.writingExercises || []),
+    ...(CANTEEN_TOPIC.writingExercises || []),
+    ...(RECRUITMENT_TOPIC.writingExercises || []),
+    ...(WELFARE_TOPIC.writingExercises || []),
+  ],
+  lessons: [
+    {
+      id: "co-cau-van-hanh",
+      title: "Cơ cấu & Vận hành công xưởng",
+      chineseTitle: "工厂运作与部门",
+      tag: "Vận hành & Kỹ thuật",
+      description: FACTORY_TOPIC.description,
+      icon: "🏭",
+      categories: FACTORY_TOPIC.categories,
+      words: FACTORY_TOPIC.words,
+      sentences: FACTORY_TOPIC.sentences,
+      writingExercises: FACTORY_TOPIC.writingExercises,
+    },
+    {
+      id: "do-an-cong-xuong",
+      title: CANTEEN_TOPIC.title,
+      chineseTitle: CANTEEN_TOPIC.chineseTitle,
+      tag: CANTEEN_TOPIC.tag,
+      description: CANTEEN_TOPIC.description,
+      icon: CANTEEN_TOPIC.icon,
+      categories: CANTEEN_TOPIC.categories,
+      words: CANTEEN_TOPIC.words,
+      sentences: CANTEEN_TOPIC.sentences,
+      writingExercises: CANTEEN_TOPIC.writingExercises,
+    },
+    {
+      id: "bang-cap-xin-viec",
+      title: RECRUITMENT_TOPIC.title,
+      chineseTitle: RECRUITMENT_TOPIC.chineseTitle,
+      tag: RECRUITMENT_TOPIC.tag,
+      description: RECRUITMENT_TOPIC.description,
+      icon: RECRUITMENT_TOPIC.icon,
+      categories: RECRUITMENT_TOPIC.categories,
+      words: RECRUITMENT_TOPIC.words,
+      sentences: RECRUITMENT_TOPIC.sentences,
+      writingExercises: RECRUITMENT_TOPIC.writingExercises,
+    },
+    {
+      id: "che-do-phuc-loi",
+      title: WELFARE_TOPIC.title,
+      chineseTitle: WELFARE_TOPIC.chineseTitle,
+      tag: WELFARE_TOPIC.tag,
+      description: WELFARE_TOPIC.description,
+      icon: WELFARE_TOPIC.icon,
+      categories: WELFARE_TOPIC.categories,
+      words: WELFARE_TOPIC.words,
+      sentences: WELFARE_TOPIC.sentences,
+      writingExercises: WELFARE_TOPIC.writingExercises,
+    },
+  ],
+};
+
+export { HSK1_30_TOPIC };
+
+export const PRACTICE_TOPICS: PracticeTopic[] = [
+  FACTORY_MAIN_TOPIC,
+  HSK1_30_TOPIC,
+];
 
 export function findTopic(id: string): PracticeTopic | undefined {
-  return PRACTICE_TOPICS.find((t) => t.id === id);
+  const direct = PRACTICE_TOPICS.find((t) => t.id === id);
+  if (direct) return direct;
+
+  // Fallback for legacy topic ids or direct links to sub-topics
+  const legacyMap: Record<string, PracticeTopic> = {
+    "do-an-cong-xuong": CANTEEN_TOPIC,
+    "bang-cap-xin-viec": RECRUITMENT_TOPIC,
+    "che-do-phuc-loi": WELFARE_TOPIC,
+  };
+  return legacyMap[id];
 }

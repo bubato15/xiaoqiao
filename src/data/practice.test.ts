@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { fromPinyin } from "../lib/speech/sandhi";
-import { CANTEEN_TOPIC, FACTORY_TOPIC, PRACTICE_TOPICS } from "./practice";
+import { CANTEEN_TOPIC, FACTORY_TOPIC, PRACTICE_TOPICS, HSK1_30_TOPIC } from "./practice";
 
 const REQUIRED_39_WORDS = [
   "公司", "部门", "生产部", "仓库部", "人事部", "财务部", "技术部", "经理", "总经理",
@@ -51,6 +51,37 @@ describe("practice topics", () => {
         expect(() => fromPinyin(s.hanzi, s.pinyin)).not.toThrow();
         expect(s.vi.trim().length).toBeGreaterThan(0);
         expect(s.keywords.length).toBeGreaterThan(0);
+      }
+    }
+  });
+
+  it("HSK 1 3.0 topic has lessons with words, sentences, and choice exercises", () => {
+    expect(HSK1_30_TOPIC.lessons?.length).toBe(2);
+    const [lesson1, lesson2] = HSK1_30_TOPIC.lessons!;
+
+    expect(lesson1.title).toBe("Bài 1 – AI小语，你好！");
+    expect(lesson1.words.length).toBe(12);
+    expect(lesson1.fillInBlankExercises?.length).toBe(10);
+    expect(lesson1.viToZhExercises?.length).toBe(10);
+    expect(lesson1.zhToViExercises?.length).toBe(10);
+
+    expect(lesson2.title).toBe("Bài 2 – 我叫李文");
+    expect(lesson2.words.length).toBe(15);
+    expect(lesson2.fillInBlankExercises?.length).toBe(10);
+    expect(lesson2.viToZhExercises?.length).toBe(10);
+    expect(lesson2.zhToViExercises?.length).toBe(10);
+
+    for (const lesson of [lesson1, lesson2]) {
+      const allExercises = [
+        ...(lesson.fillInBlankExercises || []),
+        ...(lesson.viToZhExercises || []),
+        ...(lesson.zhToViExercises || []),
+      ];
+      for (const ex of allExercises) {
+        expect(ex.options.length).toBe(4);
+        const optionKeys = ex.options.map((o) => o.key);
+        expect(optionKeys).toEqual(["A", "B", "C", "D"]);
+        expect(optionKeys.includes(ex.answer)).toBe(true);
       }
     }
   });

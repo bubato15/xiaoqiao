@@ -5,7 +5,15 @@ import { findTopic, PRACTICE_TOPICS } from "@/data/practice";
 import { TopicPracticeClient } from "./TopicPracticeClient";
 
 export function generateStaticParams() {
-  return PRACTICE_TOPICS.map((t) => ({ topic: t.id }));
+  const ids = new Set<string>();
+  PRACTICE_TOPICS.forEach((t) => {
+    ids.add(t.id);
+    t.lessons?.forEach((l) => ids.add(l.id));
+  });
+  ids.add("do-an-cong-xuong");
+  ids.add("bang-cap-xin-viec");
+  ids.add("che-do-phuc-loi");
+  return Array.from(ids).map((topic) => ({ topic }));
 }
 
 export async function generateMetadata({
