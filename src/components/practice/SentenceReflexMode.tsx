@@ -17,9 +17,10 @@ export function SentenceReflexMode({
   practicedMap: Record<string, boolean>;
   onTogglePracticed: (sentenceId: number) => void;
 }) {
+  const [direction, setDirection] = useState<"vi-to-zh" | "zh-to-vi">("vi-to-zh");
   const [index, setIndex] = useState(0);
   const [showKeywords, setShowKeywords] = useState(false);
-  const [showChinese, setShowChinese] = useState(false);
+  const [showSolution, setShowSolution] = useState(false);
   const [enableSpeakPractice, setEnableSpeakPractice] = useState(false);
 
   const currentS = sentences[Math.min(index, sentences.length - 1)];
@@ -28,14 +29,14 @@ export function SentenceReflexMode({
 
   const handleNext = () => {
     setShowKeywords(false);
-    setShowChinese(false);
+    setShowSolution(false);
     setEnableSpeakPractice(false);
     setIndex((i) => (i + 1) % sentences.length);
   };
 
   const handlePrev = () => {
     setShowKeywords(false);
-    setShowChinese(false);
+    setShowSolution(false);
     setEnableSpeakPractice(false);
     setIndex((i) => (i - 1 + sentences.length) % sentences.length);
   };
@@ -46,9 +47,44 @@ export function SentenceReflexMode({
     }
   };
 
+  const handleChangeDirection = (newDir: "vi-to-zh" | "zh-to-vi") => {
+    setDirection(newDir);
+    setShowKeywords(false);
+    setShowSolution(false);
+    setEnableSpeakPractice(false);
+  };
+
   return (
     <div className="space-y-6">
       <div className="mx-auto max-w-2xl">
+        {/* Direction Switcher */}
+        <div className="mb-4 flex justify-center">
+          <div className="inline-flex rounded-2xl border-2 border-rule bg-paper p-1 shadow-sm">
+            <button
+              type="button"
+              onClick={() => handleChangeDirection("vi-to-zh")}
+              className={`rounded-xl px-4 py-2 text-xs sm:text-sm font-bold transition-all ${
+                direction === "vi-to-zh"
+                  ? "bg-seal text-white shadow-[0_2px_0_var(--ink)]"
+                  : "text-ink-soft hover:text-ink"
+              }`}
+            >
+              🇻🇳 ➔ 🇨🇳 Dịch Việt - Trung
+            </button>
+            <button
+              type="button"
+              onClick={() => handleChangeDirection("zh-to-vi")}
+              className={`rounded-xl px-4 py-2 text-xs sm:text-sm font-bold transition-all ${
+                direction === "zh-to-vi"
+                  ? "bg-seal text-white shadow-[0_2px_0_var(--ink)]"
+                  : "text-ink-soft hover:text-ink"
+              }`}
+            >
+              🇨🇳 ➔ 🇻🇳 Dịch Trung - Việt
+            </button>
+          </div>
+        </div>
+
         {/* Main reflex card */}
         <div className="rounded-3xl border-3 border-ink bg-paper p-6 sm:p-8 shadow-[0_6px_0_var(--ink)]">
           {/* Header row */}
@@ -70,32 +106,74 @@ export function SentenceReflexMode({
             </button>
           </div>
 
-          {/* Vietnamese prompt */}
+          {/* Prompt Section */}
           <div className="mt-6 text-center">
-            <span className="text-xs font-semibold uppercase tracking-wider text-ink-soft">
-              Dịch câu sau sang tiếng Trung:
-            </span>
-            <h3 className="mt-2 font-serif text-2xl sm:text-3xl font-bold leading-snug text-ink">
-              &ldquo;{currentS.vi}&rdquo;
-            </h3>
-            <p className="mt-1 text-xs text-ink-soft sm:hidden">{currentS.situation}</p>
+            {direction === "vi-to-zh" ? (
+              <>
+                <span className="text-xs font-semibold uppercase tracking-wider text-ink-soft">
+                  Dịch câu sau sang tiếng Trung:
+                </span>
+                <h3 className="mt-2 font-serif text-2xl sm:text-3xl font-bold leading-snug text-ink">
+                  &ldquo;{currentS.vi}&rdquo;
+                </h3>
+              </>
+            ) : (
+              <>
+                <div className="flex items-center justify-center gap-2">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-ink-soft">
+                    Dịch câu sau sang tiếng Việt:
+                  </span>
+                  <button
+                    type="button"
+                    onClick={handleListen}
+                    title="Nghe phát âm"
+                    className="p-1 rounded-full border border-rule bg-paper-deep text-xs hover:bg-paper"
+                  >
+                    🔊
+                  </button>
+                </div>
+                <h3 className="mt-2 font-serif han text-3xl sm:text-4xl font-bold leading-snug text-seal">
+                  {currentS.hanzi}
+                </h3>
+                {/* Pinyin hint */}
+                <div className="mt-2 flex flex-wrap justify-center gap-x-1.5 gap-y-0.5">
+                  {syllables.map((s, idx) => (
+                    <span
+                      key={idx}
+                      className="pinyin text-xs sm:text-sm font-semibold"
+                      style={{ color: toneColor(s.surface || s.citation) }}
+                    >
+                      {s.marked}
+                    </span>
+                  ))}
+                </div>
+              </>
+            )}
+            <p className="mt-2 text-xs text-ink-soft sm:hidden">{currentS.situation}</p>
           </div>
 
-          {/* Keywords hint toggle */}
+          {/* Hint & Reveal Toggles */}
           <div className="mt-6 flex justify-center gap-2">
             <button
               type="button"
               onClick={() => setShowKeywords((v) => !v)}
               className="btn-soft text-xs sm:text-sm font-medium"
             >
-              💡 {showKeywords ? "Ẩn từ khóa gợi ý" : "Xem từ khóa gợi ý"}
+              💡 {showKeywords ? "Ẩn gợi ý" : "Xem từ khóa gợi ý"}
             </button>
             <button
               type="button"
-              onClick={() => setShowChinese((v) => !v)}
+              onClick={() => setShowSolution((v) => !v)}
               className="seal px-4 py-2 text-xs sm:text-sm font-semibold"
             >
-              👁 {showChinese ? "Ẩn câu tiếng Trung" : "Hiện câu tiếng Trung"}
+              👁{" "}
+              {showSolution
+                ? direction === "vi-to-zh"
+                  ? "Ẩn câu tiếng Trung"
+                  : "Ẩn nghĩa tiếng Việt"
+                : direction === "vi-to-zh"
+                ? "Hiện câu tiếng Trung"
+                : "Hiện nghĩa tiếng Việt"}
             </button>
           </div>
 
@@ -103,7 +181,7 @@ export function SentenceReflexMode({
           {showKeywords && (
             <div className="mt-4 rounded-2xl border border-rule bg-paper-deep p-3 text-center animate-fadeIn">
               <span className="text-xs font-semibold text-ink-soft block mb-1">
-                Các từ vựng trọng tâm trong câu:
+                Từ vựng trọng tâm & Ngữ cảnh:
               </span>
               <div className="flex flex-wrap justify-center gap-2">
                 {currentS.keywords.map((kw) => (
@@ -116,39 +194,52 @@ export function SentenceReflexMode({
                   </span>
                 ))}
               </div>
+              <p className="mt-2 text-xs text-ink-soft italic">{currentS.situation}</p>
             </div>
           )}
 
-          {/* Revealed Chinese solution */}
-          {showChinese && (
+          {/* Revealed Solution Box */}
+          {showSolution && (
             <div className="mt-6 rounded-2xl border-2 border-tone-2/30 bg-mint/20 p-5 text-center animate-fadeIn">
-              <div className="flex items-center justify-center gap-3">
-                <span lang="zh-CN" className="han text-2xl sm:text-3xl font-bold text-ink">
-                  {currentS.hanzi}
-                </span>
-                <button
-                  type="button"
-                  onClick={handleListen}
-                  title="Nghe câu mẫu"
-                  aria-label="Nghe câu mẫu"
-                  className="seal h-8 w-8 text-xs shrink-0"
-                >
-                  🔊
-                </button>
-              </div>
+              {direction === "vi-to-zh" ? (
+                <>
+                  <div className="flex items-center justify-center gap-3">
+                    <span lang="zh-CN" className="han text-2xl sm:text-3xl font-bold text-ink">
+                      {currentS.hanzi}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={handleListen}
+                      title="Nghe câu mẫu"
+                      aria-label="Nghe câu mẫu"
+                      className="seal h-8 w-8 text-xs shrink-0"
+                    >
+                      🔊
+                    </button>
+                  </div>
 
-              {/* Syllable-by-syllable Pinyin */}
-              <div className="mt-3 flex flex-wrap justify-center gap-x-2 gap-y-1">
-                {syllables.map((s, idx) => (
-                  <span
-                    key={idx}
-                    className="pinyin text-base sm:text-lg font-bold"
-                    style={{ color: toneColor(s.surface || s.citation) }}
-                  >
-                    {s.marked}
-                  </span>
-                ))}
-              </div>
+                  {/* Syllable-by-syllable Pinyin */}
+                  <div className="mt-3 flex flex-wrap justify-center gap-x-2 gap-y-1">
+                    {syllables.map((s, idx) => (
+                      <span
+                        key={idx}
+                        className="pinyin text-base sm:text-lg font-bold"
+                        style={{ color: toneColor(s.surface || s.citation) }}
+                      >
+                        {s.marked}
+                      </span>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <span className="text-xs text-ink-soft block">Nghĩa tiếng Việt chuẩn:</span>
+                  <p className="font-serif text-2xl sm:text-3xl font-bold text-ink mt-1">
+                    &ldquo;{currentS.vi}&rdquo;
+                  </p>
+                  <p className="text-xs text-ink-soft mt-1">Tình huống: {currentS.situation}</p>
+                </>
+              )}
 
               {/* Voice Practice Toggle */}
               <div className="mt-5 border-t border-rule/50 pt-4">
@@ -179,70 +270,39 @@ export function SentenceReflexMode({
           )}
 
           {/* Navigation Controls */}
-          <div className="mt-8 flex items-center justify-between gap-3 border-t border-rule pt-4">
+          <div className="mt-8 flex items-center justify-between border-t border-rule pt-4">
             <button
               type="button"
               onClick={handlePrev}
-              className="btn-soft flex-1 text-sm font-semibold"
+              className="btn-soft px-4 py-2 text-xs sm:text-sm font-medium"
             >
               ← Câu trước
             </button>
+            <div className="flex gap-1">
+              {sentences.map((_, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => {
+                    setShowKeywords(false);
+                    setShowSolution(false);
+                    setEnableSpeakPractice(false);
+                    setIndex(i);
+                  }}
+                  className={`h-2.5 rounded-full transition-all ${
+                    i === index ? "w-6 bg-seal" : "w-2.5 bg-paper-deep border border-rule"
+                  }`}
+                  aria-label={`Đi tới câu ${i + 1}`}
+                />
+              ))}
+            </div>
             <button
               type="button"
               onClick={handleNext}
-              className="btn-soft flex-1 text-sm font-semibold"
+              className="seal px-4 py-2 text-xs sm:text-sm font-semibold"
             >
-              Câu tiếp →
+              Câu tiếp theo →
             </button>
-          </div>
-        </div>
-
-        {/* Overview of all 10 sentences */}
-        <div className="mt-8 rounded-2xl border-2 border-rule bg-paper p-5">
-          <div className="flex items-center justify-between mb-4">
-            <h4 className="font-serif text-lg font-bold text-ink">
-              Toàn bộ 10 câu phản xạ công xưởng
-            </h4>
-            <span className="text-xs text-ink-soft">
-              Đã luyện: {sentences.filter((s) => practicedMap[s.id]).length}/{sentences.length}
-            </span>
-          </div>
-
-          <div className="space-y-2">
-            {sentences.map((s, idx) => {
-              const active = idx === index;
-              const done = Boolean(practicedMap[s.id]);
-              return (
-                <button
-                  key={s.id}
-                  type="button"
-                  onClick={() => {
-                    setIndex(idx);
-                    setShowKeywords(false);
-                    setShowChinese(false);
-                    setEnableSpeakPractice(false);
-                  }}
-                  className={`w-full flex items-center justify-between p-3 rounded-xl border-2 text-left transition-all ${
-                    active
-                      ? "border-seal bg-peach/30 shadow-sm"
-                      : "border-rule bg-paper hover:border-ink hover:bg-paper-deep"
-                  }`}
-                >
-                  <div className="min-w-0 pr-2">
-                    <div className="flex items-center gap-2">
-                      <span className="font-bold text-xs text-seal">Câu {idx + 1}:</span>
-                      <span className="font-medium text-sm text-ink truncate">{s.vi}</span>
-                    </div>
-                    <span lang="zh-CN" className="han text-xs text-ink-soft truncate block mt-0.5">
-                      {s.hanzi}
-                    </span>
-                  </div>
-                  <span className={`text-xs font-bold shrink-0 ${done ? "text-tone-2" : "text-ink-soft"}`}>
-                    {done ? "✓ Đã luyện" : "Chưa luyện"}
-                  </span>
-                </button>
-              );
-            })}
           </div>
         </div>
       </div>

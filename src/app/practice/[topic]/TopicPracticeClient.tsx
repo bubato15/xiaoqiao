@@ -139,25 +139,30 @@ export function TopicPracticeClient({ topic }: { topic: PracticeTopic }) {
   }
 
   tabs.push({
+    id: "reflex",
+    label: "Dịch phản xạ 2 chiều",
+    icon: "💬",
+    count: activeSentences.length,
+  });
+
+  tabs.push({
+    id: "writing",
+    label: "Bài tập viết tình huống",
+    icon: "✍️",
+    count: writingExercises.length,
+  });
+
+  tabs.push({
     id: "flashcard",
     label: "Thẻ ghi nhớ",
     icon: "🗂️",
     count: activeWords.length,
   });
 
-  if (!hasSpecialExercises) {
-    tabs.push({
-      id: "quiz",
-      label: "Trắc nghiệm phản xạ",
-      icon: "⚡",
-    });
-  }
-
   tabs.push({
-    id: "reflex",
-    label: "Dịch câu phản xạ",
-    icon: "💬",
-    count: activeSentences.length,
+    id: "quiz",
+    label: "Trắc nghiệm từ mới",
+    icon: "⚡",
   });
 
   tabs.push({
@@ -165,13 +170,6 @@ export function TopicPracticeClient({ topic }: { topic: PracticeTopic }) {
     label: "Luyện phát âm",
     icon: "🎙️",
     count: activeWords.length,
-  });
-
-  tabs.push({
-    id: "writing",
-    label: "Bài tập viết",
-    icon: "✍️",
-    count: writingExercises.length,
   });
 
   return (

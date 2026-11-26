@@ -758,6 +758,7 @@ export const WELFARE_TOPIC: PracticeTopic = {
 };
 
 import { HSK1_30_TOPIC } from "./hsk1-30-practice";
+import { FACTORY_REVIEW_LESSON } from "./factory-review-practice";
 
 export const FACTORY_MAIN_TOPIC: PracticeTopic = {
   id: "cong-xuong",
@@ -840,10 +841,11 @@ export const FACTORY_MAIN_TOPIC: PracticeTopic = {
       sentences: WELFARE_TOPIC.sentences,
       writingExercises: WELFARE_TOPIC.writingExercises,
     },
+    FACTORY_REVIEW_LESSON,
   ],
 };
 
-export { HSK1_30_TOPIC };
+export { HSK1_30_TOPIC, FACTORY_REVIEW_LESSON };
 
 export const PRACTICE_TOPICS: PracticeTopic[] = [
   FACTORY_MAIN_TOPIC,

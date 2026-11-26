@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { fromPinyin } from "../lib/speech/sandhi";
-import { CANTEEN_TOPIC, FACTORY_TOPIC, PRACTICE_TOPICS, HSK1_30_TOPIC } from "./practice";
+import { CANTEEN_TOPIC, FACTORY_TOPIC, PRACTICE_TOPICS, HSK1_30_TOPIC, FACTORY_REVIEW_LESSON } from "./practice";
 
 const REQUIRED_39_WORDS = [
   "公司", "部门", "生产部", "仓库部", "人事部", "财务部", "技术部", "经理", "总经理",
@@ -83,6 +83,29 @@ describe("practice topics", () => {
         expect(optionKeys).toEqual(["A", "B", "C", "D"]);
         expect(optionKeys.includes(ex.answer)).toBe(true);
       }
+    }
+  });
+
+  it("Factory topic has comprehensive review lesson with 2-way reflex and writing exercises", () => {
+    expect(FACTORY_REVIEW_LESSON.words.length).toBe(40);
+    expect(FACTORY_REVIEW_LESSON.sentences.length).toBe(16);
+    expect(FACTORY_REVIEW_LESSON.fillInBlankExercises?.length).toBe(10);
+    expect(FACTORY_REVIEW_LESSON.viToZhExercises?.length).toBe(10);
+    expect(FACTORY_REVIEW_LESSON.zhToViExercises?.length).toBe(10);
+    expect(FACTORY_REVIEW_LESSON.writingExercises?.length).toBe(8);
+
+    for (const w of FACTORY_REVIEW_LESSON.words) {
+      const hanziCount = [...w.hanzi].filter((c) => /\p{Script=Han}/u.test(c)).length;
+      const pinyinParts = w.pinyin.trim().split(/\s+/);
+      expect(pinyinParts.length, `Length mismatch in word: ${w.hanzi}`).toBe(hanziCount);
+      expect(() => fromPinyin(w.hanzi, w.pinyin)).not.toThrow();
+    }
+
+    for (const s of FACTORY_REVIEW_LESSON.sentences) {
+      const hanziCount = [...s.hanzi].filter((c) => /\p{Script=Han}/u.test(c)).length;
+      const pinyinParts = s.pinyin.trim().split(/\s+/);
+      expect(pinyinParts.length, `Length mismatch in sentence: ${s.hanzi}`).toBe(hanziCount);
+      expect(() => fromPinyin(s.hanzi, s.pinyin)).not.toThrow();
     }
   });
 });
